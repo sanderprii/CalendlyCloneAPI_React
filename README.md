@@ -21,8 +21,8 @@ A RESTful API for scheduling and managing appointments, built with Express.js an
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/calendly-clone-api.git
-   cd calendly-clone-api
+   git clone https://github.com/EeroVallistu/CalendlyCloneAPI.git
+   cd CalendlyCloneAPI
    ```
 
 2. Install dependencies:
