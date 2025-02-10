@@ -86,4 +86,29 @@ router.delete('/:appointmentId', (req, res) => {
   });
 });
 
+// Get all appointments
+router.get('/', (req, res) => {
+  db.all('SELECT * FROM appointments', (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: 'Database error' });
+    }
+    res.json(rows);
+  });
+});
+
+// Get a specific appointment by ID
+router.get('/:appointmentId', (req, res) => {
+  const { appointmentId } = req.params;
+
+  db.get('SELECT * FROM appointments WHERE id = ?', [appointmentId], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: 'Database error' });
+    }
+    if (!row) {
+      return res.status(404).json({ error: 'Appointment not found' });
+    }
+    res.json(row);
+  });
+});
+
 module.exports = router; 
