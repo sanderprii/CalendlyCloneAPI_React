@@ -47,4 +47,46 @@ router.post('/', (req, res) => {
   );
 });
 
+// Update user's schedule
+router.put('/:userId', (req, res) => {
+  const { userId } = req.params;
+  const { availability } = req.body;
+
+  if (!availability) {
+    return res.status(400).json({ error: 'Availability is required' });
+  }
+
+  const availabilityJson = JSON.stringify(availability);
+  db.run(
+    'UPDATE schedules SET availability = ? WHERE userId = ?',
+    [availabilityJson, userId],
+    function (err) {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: 'Database error', details: err.message });
+      }
+      if (this.changes === 0) {
+        return res.status(404).json({ error: 'Schedule not found' });
+      }
+      res.json({ userId, availability });
+    }
+  );
+});
+
+// Delete a schedule
+router.delete('/:userId', (req, res) => {
+  const { userId } = req.params;
+
+  db.run('DELETE FROM schedules WHERE userId = ?', [userId], function (err) {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ error: 'Database error', details: err.message });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: 'Schedule not found' });
+    }
+    res.status(204).send(); // No content
+  });
+});
+
 module.exports = router; 
