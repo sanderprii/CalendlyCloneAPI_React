@@ -7,7 +7,9 @@
     "dev": "nodemon --ext js,yaml,yml your-app.js"
   },
   "dependencies": {
+    "connect-sqlite3": "^0.9.15",
     "express": "^4.18.2",
+    "express-session": "^1.18.1",
     "sqlite3": "^5.1.6",
     "swagger-ui-express": "^4.6.3",
     "yamljs": "^0.3.0"
@@ -15,4 +17,4 @@
   "devDependencies": {
     "nodemon": "^3.0.2"
   }
-} 
+}

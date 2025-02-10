@@ -3,24 +3,45 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./database.db');
+const session = require('express-session');
+const SQLiteStore = require('connect-sqlite3')(session);
+const auth = require('./middleware/auth');
 
 const app = express();
 app.use(express.json());
+
+// Add this after express.json() middleware
+app.use(session({
+  store: new SQLiteStore({
+    db: 'sessions.db',
+    concurrentDB: true
+  }),
+  secret: 'your-secret-key', // Change this to a secure random string
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production'
+  }
+}));
 
 // Import routes
 const userRoutes = require('./routes/users');
 const eventRoutes = require('./routes/events');
 const scheduleRoutes = require('./routes/schedules');
 const appointmentRoutes = require('./routes/appointments');
+const sessionsRoutes = require('./routes/sessions');
 
 // Load OpenAPI spec
 const swaggerDocument = YAML.load('./calendly-clone-api.yaml');
 
 // Routes
-app.use('/users', userRoutes);
-app.use('/events', eventRoutes);
-app.use('/schedules', scheduleRoutes);
-app.use('/appointments', appointmentRoutes);
+app.use('/users', auth, userRoutes);
+app.use('/events', auth, eventRoutes);
+app.use('/schedules', auth, scheduleRoutes);
+app.use('/appointments', auth, appointmentRoutes);
+app.use('/api/v1/sessions', sessionsRoutes);
 
 // Swagger documentation
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

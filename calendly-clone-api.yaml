@@ -52,18 +52,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Invalid input data"
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Unauthorized access"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Internal server error"
     post:
       security:
         - BearerAuth: []
@@ -125,12 +131,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Resource not found"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Internal server error"
     patch:
       security:
         - BearerAuth: []
@@ -199,12 +209,73 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Resource not found"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+  /sessions:
+    post:
+      tags:
+        - Authentication
+      summary: Create session (login)
+      description: Authenticate user and create session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Login successful
+        '400':
+          description: Missing email or password
+        '401':
+          description: Invalid credentials
+        '500':
+          description: Server error
+
+    delete:
+      tags:
+        - Authentication
+      summary: Destroy session (logout)
+      description: End user session
+      responses:
+        '200':
+          description: Logout successful
+        '500':
+          description: Server error
+
+    get:
+      tags:
+        - Authentication
+      summary: Check session
+      description: Check if user is authenticated
+      responses:
+        '200':
+          description: Session status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  authenticated:
+                    type: boolean
+                  user:
+                    $ref: '#/components/schemas/User'
 
   /events:
     post:
@@ -255,23 +326,27 @@ paths:
           description: The ID of the event to retrieve.
       responses:
         '200':
-          description: Event details retrieved successfully
+          description: Event found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EventType'
+                $ref: '#/components/schemas/Event'
         '404':
           description: Event not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Resource not found"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Internal server error"
     patch:
       security:
         - BearerAuth: []
@@ -340,6 +415,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Resource not found"
         '500':
           description: Internal server error
           content:
@@ -407,12 +484,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Resource not found"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Internal server error"
     patch:
       security:
         - BearerAuth: []
@@ -458,6 +539,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Internal server error"
     delete:
       security:
         - BearerAuth: []
@@ -481,12 +564,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Resource not found"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Internal server error"
 
   /appointments:
     post:
@@ -611,12 +698,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Resource not found"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Internal server error"
     get:
       tags:
         - Appointments
@@ -642,12 +733,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Resource not found"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Internal server error"
 
 components:
   schemas:
@@ -776,20 +871,32 @@ components:
         - inviteeEmail
         - startTime
 
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        duration:
+          type: integer
+        description:
+          type: string
+        color:
+          type: string
+      required:
+        - id
+        - name
+        - duration
+
     ErrorResponse:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-            message:
-              type: string
-            details:
-              type: string
+        message:
+          type: string
+          example: "Bad Request"
       required:
-        - error
+        - message
 
   securitySchemes:
     BearerAuth:

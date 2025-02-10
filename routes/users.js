@@ -120,4 +120,24 @@ router.post('/', (req, res) => {
   );
 });
 
+// Using session-based approach
+router.post('/sessions', (req, res) => {
+  // Login logic
+  const { email, password } = req.body;
+  // ... authentication logic
+  req.session.user = { id: user.id, email: user.email };
+  res.json({ message: 'Login successful' });
+});
+
+router.delete('/sessions', (req, res) => {
+  // Logout logic
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ error: 'Could not log out' });
+    }
+    res.clearCookie('connect.sid');
+    res.json({ message: 'Logout successful' });
+  });
+});
+
 module.exports = router; 
