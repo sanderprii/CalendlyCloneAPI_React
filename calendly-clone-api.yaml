@@ -8,6 +8,8 @@ servers:
 paths:
   /users:
     get:
+      tags:
+        - Users
       summary: List all users
       description: Retrieve a paginated list of all users.
       parameters:
@@ -55,6 +57,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     post:
+      tags:
+        - Users
       summary: Create a new user
       description: Create a new user with a name, email, password, and optional timezone.
       requestBody:
@@ -85,6 +89,8 @@ paths:
   
   /users/{userId}:
     get:
+      tags:
+        - Users
       summary: Get user details
       description: Retrieve details of a specific user by their ID.
       parameters:
@@ -114,6 +120,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     patch:
+      tags:
+        - Users
       summary: Partially update a user
       description: Update specific fields of a user by their ID.
       parameters:
@@ -155,6 +163,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
+      tags:
+        - Users
       summary: Delete a user
       description: Delete a specific user by their ID.
       parameters:
@@ -182,6 +192,8 @@ paths:
 
   /events:
     post:
+      tags:
+        - Events
       summary: Create a new event type
       description: Create a new event type with a name, duration, and optional details.
       requestBody:
@@ -212,6 +224,8 @@ paths:
 
   /events/{eventId}:
     get:
+      tags:
+        - Events
       summary: Get event details
       description: Retrieve details of a specific event by its ID.
       parameters:
@@ -241,6 +255,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     patch:
+      tags:
+        - Events
       summary: Partially update an event
       description: Update specific fields of an event by its ID.
       parameters:
@@ -282,6 +298,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
+      tags:
+        - Events
       summary: Delete an event
       description: Delete a specific event by its ID.
       parameters:
@@ -309,6 +327,8 @@ paths:
 
   /schedules:
     post:
+      tags:
+        - Schedules
       summary: Create a new schedule
       description: Create a new schedule for a user with their availability.
       requestBody:
@@ -339,6 +359,8 @@ paths:
 
   /schedules/{userId}:
     get:
+      tags:
+        - Schedules
       summary: Get user's schedule
       description: Retrieve the schedule for a specific user by their ID.
       parameters:
@@ -368,6 +390,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     patch:
+      tags:
+        - Schedules
       summary: Partially update a user's schedule
       description: Update specific fields of a user's schedule by their ID.
       parameters:
@@ -409,6 +433,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
+      tags:
+        - Schedules
       summary: Delete a schedule
       description: Delete the schedule for a specific user by their ID.
       parameters:
@@ -436,6 +462,8 @@ paths:
 
   /appointments:
     post:
+      tags:
+        - Appointments
       summary: Schedule an appointment
       description: Schedule a new appointment for an event with a user and invitee.
       requestBody:
@@ -464,6 +492,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     get:
+      tags:
+        - Appointments
       summary: List all appointments
       description: Retrieve a list of all appointments.
       responses:
@@ -484,6 +514,8 @@ paths:
 
   /appointments/{appointmentId}:
     patch:
+      tags:
+        - Appointments
       summary: Partially update an appointment
       description: Update specific fields of an appointment by its ID.
       parameters:
@@ -525,6 +557,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
+      tags:
+        - Appointments
       summary: Delete an appointment
       description: Delete a specific appointment by its ID.
       parameters:
@@ -550,6 +584,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     get:
+      tags:
+        - Appointments
       summary: Get appointment details
       description: Retrieve details of a specific appointment by its ID.
       parameters:
