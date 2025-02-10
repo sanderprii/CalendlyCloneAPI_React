@@ -9,13 +9,13 @@ db.serialize(() => {
 
   // Insert users
   const users = [
-    { id: '1', name: 'John Doe', email: 'john@example.com', timezone: 'UTC' },
-    { id: '2', name: 'Jane Smith', email: 'jane@example.com', timezone: 'EST' }
+    { id: '1', name: 'John Doe', email: 'john@example.com', password: 'password123', timezone: 'UTC' },
+    { id: '2', name: 'Jane Smith', email: 'jane@example.com', password: 'password456', timezone: 'EST' }
   ];
 
-  const insertUser = db.prepare('INSERT INTO users (id, name, email, timezone) VALUES (?, ?, ?, ?)');
+  const insertUser = db.prepare('INSERT INTO users (id, name, email, password, timezone) VALUES (?, ?, ?, ?, ?)');
   users.forEach(user => {
-    insertUser.run(user.id, user.name, user.email, user.timezone);
+    insertUser.run(user.id, user.name, user.email, user.password, user.timezone);
   });
   insertUser.finalize();
 

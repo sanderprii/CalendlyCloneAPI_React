@@ -4,7 +4,7 @@ A RESTful API for scheduling and managing appointments, built with Express.js an
 
 ## Features
 
-- **User Management**: Create and manage users.
+- **User Management**: Create, update, and delete users.
 - **Event Management**: Create, update, and delete event types.
 - **Schedule Management**: Create, update, and delete user schedules.
 - **Appointment Management**: Schedule, update, and delete appointments.

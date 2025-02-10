@@ -37,28 +37,48 @@ router.get('/:eventId', (req, res) => {
   });
 });
 
-// Update an event
-router.put('/:eventId', (req, res) => {
+// Partially update an event
+router.patch('/:eventId', (req, res) => {
   const { eventId } = req.params;
   const { name, duration, description, color } = req.body;
 
-  if (!name || !duration) {
-    return res.status(400).json({ error: 'Name and duration are required' });
+  if (!name && !duration && !description && !color) {
+    return res.status(400).json({ error: 'At least one field is required' });
   }
 
-  db.run(
-    'UPDATE events SET name = ?, duration = ?, description = ?, color = ? WHERE id = ?',
-    [name, duration, description, color, eventId],
-    function (err) {
-      if (err) {
-        return res.status(500).json({ error: 'Database error' });
-      }
-      if (this.changes === 0) {
-        return res.status(404).json({ error: 'Event not found' });
-      }
-      res.json({ id: eventId, name, duration, description, color });
+  const fields = [];
+  const values = [];
+
+  if (name) {
+    fields.push('name = ?');
+    values.push(name);
+  }
+  if (duration) {
+    fields.push('duration = ?');
+    values.push(duration);
+  }
+  if (description) {
+    fields.push('description = ?');
+    values.push(description);
+  }
+  if (color) {
+    fields.push('color = ?');
+    values.push(color);
+  }
+
+  values.push(eventId);
+
+  const query = `UPDATE events SET ${fields.join(', ')} WHERE id = ?`;
+
+  db.run(query, values, function (err) {
+    if (err) {
+      return res.status(500).json({ error: 'Database error' });
     }
-  );
+    if (this.changes === 0) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+    res.json({ id: eventId, name, duration, description, color });
+  });
 });
 
 // Delete an event

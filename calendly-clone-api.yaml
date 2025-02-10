@@ -85,6 +85,72 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      summary: Partially update a user
+      description: Update specific fields of a user by their ID.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the user to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Delete a user
+      description: Delete a specific user by their ID.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the user to delete.
+      responses:
+        '204':
+          description: User deleted successfully
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /events:
     post:
@@ -146,9 +212,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    put:
-      summary: Update an event
-      description: Update details of a specific event by its ID.
+    patch:
+      summary: Partially update an event
+      description: Update specific fields of an event by its ID.
       parameters:
         - name: eventId
           in: path
@@ -273,9 +339,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    put:
-      summary: Update user's schedule
-      description: Update the schedule for a specific user by their ID.
+    patch:
+      summary: Partially update a user's schedule
+      description: Update specific fields of a user's schedule by their ID.
       parameters:
         - name: userId
           in: path
@@ -371,9 +437,9 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
   /appointments/{appointmentId}:
-    put:
-      summary: Update an appointment
-      description: Update details of a specific appointment by its ID.
+    patch:
+      summary: Partially update an appointment
+      description: Update specific fields of an appointment by its ID.
       parameters:
         - name: appointmentId
           in: path
@@ -466,12 +532,15 @@ components:
           type: string
         email:
           type: string
+        password:
+          type: string
         timezone:
           type: string
       required:
         - id
         - name
         - email
+        - password
 
     EventType:
       type: object

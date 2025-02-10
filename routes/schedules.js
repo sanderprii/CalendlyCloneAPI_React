@@ -47,8 +47,8 @@ router.post('/', (req, res) => {
   );
 });
 
-// Update user's schedule
-router.put('/:userId', (req, res) => {
+// Partially update a schedule
+router.patch('/:userId', (req, res) => {
   const { userId } = req.params;
   const { availability } = req.body;
 

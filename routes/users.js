@@ -40,4 +40,63 @@ router.get('/:userId', (req, res) => {
   });
 });
 
+// Partially update a user
+router.patch('/:userId', (req, res) => {
+  const { userId } = req.params;
+  const { name, email, password, timezone } = req.body;
+
+  if (!name && !email && !password && !timezone) {
+    return res.status(400).json({ error: 'At least one field is required' });
+  }
+
+  const fields = [];
+  const values = [];
+
+  if (name) {
+    fields.push('name = ?');
+    values.push(name);
+  }
+  if (email) {
+    fields.push('email = ?');
+    values.push(email);
+  }
+  if (password) {
+    fields.push('password = ?');
+    values.push(password);
+  }
+  if (timezone) {
+    fields.push('timezone = ?');
+    values.push(timezone);
+  }
+
+  values.push(userId);
+
+  const query = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
+
+  db.run(query, values, function (err) {
+    if (err) {
+      return res.status(500).json({ error: 'Database error' });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json({ id: userId, name, email, timezone });
+  });
+});
+
+// Delete a user
+router.delete('/:userId', (req, res) => {
+  const { userId } = req.params;
+
+  db.run('DELETE FROM users WHERE id = ?', [userId], function (err) {
+    if (err) {
+      return res.status(500).json({ error: 'Database error' });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(204).send(); // No content
+  });
+});
+
 module.exports = router; 
