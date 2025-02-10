@@ -8,6 +8,8 @@ servers:
 paths:
   /users:
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Users
       summary: List all users
@@ -50,6 +52,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error
           content:
@@ -57,6 +65,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     post:
+      security:
+        - BearerAuth: []
       tags:
         - Users
       summary: Create a new user
@@ -89,6 +99,8 @@ paths:
   
   /users/{userId}:
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Users
       summary: Get user details
@@ -120,6 +132,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     patch:
+      security:
+        - BearerAuth: []
       tags:
         - Users
       summary: Partially update a user
@@ -163,6 +177,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
+      security:
+        - BearerAuth: []
       tags:
         - Users
       summary: Delete a user
@@ -192,6 +208,8 @@ paths:
 
   /events:
     post:
+      security:
+        - BearerAuth: []
       tags:
         - Events
       summary: Create a new event type
@@ -255,6 +273,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     patch:
+      security:
+        - BearerAuth: []
       tags:
         - Events
       summary: Partially update an event
@@ -298,6 +318,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
+      security:
+        - BearerAuth: []
       tags:
         - Events
       summary: Delete an event
@@ -327,6 +349,8 @@ paths:
 
   /schedules:
     post:
+      security:
+        - BearerAuth: []
       tags:
         - Schedules
       summary: Create a new schedule
@@ -390,6 +414,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     patch:
+      security:
+        - BearerAuth: []
       tags:
         - Schedules
       summary: Partially update a user's schedule
@@ -433,6 +459,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
+      security:
+        - BearerAuth: []
       tags:
         - Schedules
       summary: Delete a schedule
@@ -462,6 +490,8 @@ paths:
 
   /appointments:
     post:
+      security:
+        - BearerAuth: []
       tags:
         - Appointments
       summary: Schedule an appointment
@@ -514,6 +544,8 @@ paths:
 
   /appointments/{appointmentId}:
     patch:
+      security:
+        - BearerAuth: []
       tags:
         - Appointments
       summary: Partially update an appointment
@@ -557,6 +589,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
     delete:
+      security:
+        - BearerAuth: []
       tags:
         - Appointments
       summary: Delete an appointment
@@ -755,4 +789,10 @@ components:
             details:
               type: string
       required:
-        - error 
+        - error
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
