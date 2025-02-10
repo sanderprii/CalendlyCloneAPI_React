@@ -8,15 +8,21 @@ router.get('/:userId', (req, res) => {
 
   db.get('SELECT * FROM schedules WHERE userId = ?', [userId], (err, row) => {
     if (err) {
-      return res.status(500).json({ error: 'Database error' });
+      console.error('Database error:', err); // Log the error for debugging
+      return res.status(500).json({ error: 'Database error', details: err.message });
     }
     if (!row) {
       return res.status(404).json({ error: 'Schedule not found' });
     }
 
-    // Parse availability from JSON string
-    row.availability = JSON.parse(row.availability);
-    res.json(row);
+    try {
+      // Parse availability from JSON string
+      row.availability = JSON.parse(row.availability);
+      res.json(row);
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      res.status(500).json({ error: 'Failed to parse availability data' });
+    }
   });
 });
 

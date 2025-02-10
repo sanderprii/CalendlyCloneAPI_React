@@ -9,6 +9,7 @@ paths:
   /users:
     get:
       summary: List all users
+      description: Retrieve a paginated list of all users.
       parameters:
         - name: page
           in: query
@@ -17,6 +18,7 @@ paths:
             type: integer
             minimum: 1
             default: 1
+          description: The page number to retrieve.
         - name: pageSize
           in: query
           required: true
@@ -25,9 +27,10 @@ paths:
             minimum: 1
             maximum: 100
             default: 20
+          description: The number of users to return per page.
       responses:
         '200':
-          description: List of users
+          description: List of users retrieved successfully
           content:
             application/json:
               schema:
@@ -40,7 +43,13 @@ paths:
                   pagination:
                     $ref: '#/components/schemas/Pagination'
         '400':
-          description: Bad request
+          description: Invalid pagination parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
           content:
             application/json:
               schema:
@@ -49,23 +58,38 @@ paths:
   /users/{userId}:
     get:
       summary: Get user details
+      description: Retrieve details of a specific user by their ID.
       parameters:
         - name: userId
           in: path
           required: true
           schema:
             type: string
+          description: The ID of the user to retrieve.
       responses:
         '200':
-          description: User details
+          description: User details retrieved successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /events:
     post:
       summary: Create a new event type
+      description: Create a new event type with a name, duration, and optional details.
       requestBody:
         required: true
         content:
@@ -74,66 +98,120 @@ paths:
               $ref: '#/components/schemas/EventType'
       responses:
         '201':
-          description: Event type created
+          description: Event type created successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/EventType'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /events/{eventId}:
     get:
       summary: Get event details
+      description: Retrieve details of a specific event by its ID.
       parameters:
         - name: eventId
           in: path
           required: true
           schema:
             type: string
+          description: The ID of the event to retrieve.
       responses:
         '200':
-          description: Event details
+          description: Event details retrieved successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/EventType'
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /schedules:
     post:
       summary: Create a new schedule
+      description: Create a new schedule for a user with their availability.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Schedule'
+              $ref: '#/components/schemas/ScheduleInput'
       responses:
         '201':
-          description: Schedule created
+          description: Schedule created successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Schedule'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /schedules/{userId}:
     get:
       summary: Get user's schedule
+      description: Retrieve the schedule for a specific user by their ID.
       parameters:
         - name: userId
           in: path
           required: true
           schema:
             type: string
+          description: The ID of the user whose schedule to retrieve.
       responses:
         '200':
-          description: User's schedule
+          description: User's schedule retrieved successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Schedule'
+        '404':
+          description: Schedule not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /appointments:
     post:
       summary: Schedule an appointment
+      description: Schedule a new appointment for an event with a user and invitee.
       requestBody:
         required: true
         content:
@@ -142,11 +220,23 @@ paths:
               $ref: '#/components/schemas/Appointment'
       responses:
         '201':
-          description: Appointment scheduled
+          description: Appointment scheduled successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Appointment'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
@@ -203,6 +293,22 @@ components:
     Schedule:
       type: object
       properties:
+        id:
+          type: string
+        userId:
+          type: string
+        availability:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSlot'
+      required:
+        - id
+        - userId
+        - availability
+
+    ScheduleInput:
+      type: object
+      properties:
         userId:
           type: string
         availability:
@@ -225,6 +331,10 @@ components:
         endTime:
           type: string
           format: time
+      required:
+        - day
+        - startTime
+        - endTime
 
     Appointment:
       type: object
@@ -263,11 +373,6 @@ components:
             message:
               type: string
             details:
-              type: array
-              items:
-                type: object
-                properties:
-                  field:
-                    type: string
-                  message:
-                    type: string 
+              type: string
+      required:
+        - error 

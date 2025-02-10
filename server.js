@@ -42,7 +42,31 @@ db.serialize(() => {
     color TEXT
   )`);
 
+  db.run(`CREATE TABLE IF NOT EXISTS schedules (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId TEXT NOT NULL,
+    availability TEXT,
+    FOREIGN KEY (userId) REFERENCES users(id)
+  )`, (err) => {
+    if (err) {
+      console.error('Error creating schedules table:', err);
+    } else {
+      console.log('Schedules table created or already exists');
+    }
+  });
+
   // Add other table creations here...
+});
+
+// Log database errors
+db.on('error', (err) => {
+  console.error('Database error:', err);
+});
+
+// Log all requests
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
 });
 
 const PORT = process.env.PORT || 3000;
