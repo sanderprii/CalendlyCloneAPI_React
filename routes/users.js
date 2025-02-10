@@ -99,4 +99,25 @@ router.delete('/:userId', (req, res) => {
   });
 });
 
+// Create a new user
+router.post('/', (req, res) => {
+  const { name, email, password, timezone } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: 'Name, email, and password are required' });
+  }
+
+  const id = Date.now().toString(); // Simple ID generation
+  db.run(
+    'INSERT INTO users (id, name, email, password, timezone) VALUES (?, ?, ?, ?, ?)',
+    [id, name, email, password, timezone],
+    (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Database error' });
+      }
+      res.status(201).json({ id, name, email, timezone });
+    }
+  );
+});
+
 module.exports = router; 
