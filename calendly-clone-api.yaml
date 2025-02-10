@@ -53,7 +53,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
-                message: "Invalid input data"
+                message: "Invalid pagination parameters"
         '401':
           description: Unauthorized
           content:
@@ -61,7 +61,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
-                message: "Unauthorized access"
+                message: "Unauthorized"
         '500':
           description: Internal server error
           content:
@@ -132,7 +132,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
-                message: "Resource not found"
+                message: "User not found"
         '500':
           description: Internal server error
           content:
@@ -304,12 +304,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Invalid input"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Internal server error"
 
   /events/{eventId}:
     get:
@@ -338,7 +342,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
-                message: "Resource not found"
+                message: "Event not found"
         '500':
           description: Internal server error
           content:
@@ -451,12 +455,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Invalid input"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Internal server error"
 
   /schedules/{userId}:
     get:
@@ -485,7 +493,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
-                message: "Resource not found"
+                message: "Schedule not found"
         '500':
           description: Internal server error
           content:
@@ -602,12 +610,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Invalid input"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Internal server error"
     get:
       tags:
         - Appointments
@@ -734,7 +746,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
               example:
-                message: "Resource not found"
+                message: "Appointment not found"
         '500':
           description: Internal server error
           content:
