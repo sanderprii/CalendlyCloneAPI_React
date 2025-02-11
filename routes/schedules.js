@@ -3,6 +3,30 @@ const router = express.Router();
 const db = require('../db');
 const auth = require('../middleware/auth');
 
+// Get all schedules
+router.get('/', auth, (req, res) => {
+  db.all('SELECT * FROM schedules', (err, rows) => {
+    if (err) {
+      console.error('Database error:', err.message);
+      return res.status(500).json({ error: 'Database error' });
+    }
+
+    // Parse availability for each schedule
+    try {
+      const parsedRows = rows.map(row => {
+        return {
+          ...row,
+          availability: JSON.parse(row.availability)
+        };
+      });
+      res.json(parsedRows);
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError);
+      res.status(500).json({ error: 'Failed to parse availability data' });
+    }
+  });
+});
+
 // Get user's schedule
 router.get('/:userId', (req, res) => {
   const { userId } = req.params;

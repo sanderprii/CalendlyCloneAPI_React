@@ -3,28 +3,10 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./database.db');
-const session = require('express-session');
-const SQLiteStore = require('connect-sqlite3')(session);
 const auth = require('./middleware/auth');
 
 const app = express();
 app.use(express.json());
-
-// Add this after express.json() middleware
-app.use(session({
-  store: new SQLiteStore({
-    db: 'sessions.db',
-    concurrentDB: true
-  }),
-  secret: 'your-secret-key', // Change this to a secure random string
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24, // 1 day
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production'
-  }
-}));
 
 // Import routes
 const userRoutes = require('./routes/users');
@@ -37,7 +19,7 @@ const sessionsRoutes = require('./routes/sessions');
 const swaggerDocument = YAML.load('./calendly-clone-api.yaml');
 
 // Routes
-app.use('/users', auth, userRoutes);
+app.use('/users', userRoutes);
 app.use('/events', auth, eventRoutes);
 app.use('/schedules', auth, scheduleRoutes);
 app.use('/appointments', auth, appointmentRoutes);
@@ -53,7 +35,8 @@ db.serialize(() => {
     name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    timezone TEXT
+    timezone TEXT,
+    token TEXT
   )`);
 
   db.run(`CREATE TABLE IF NOT EXISTS events (
@@ -69,15 +52,19 @@ db.serialize(() => {
     userId TEXT NOT NULL,
     availability TEXT,
     FOREIGN KEY (userId) REFERENCES users(id)
-  )`, (err) => {
-    if (err) {
-      console.error('Error creating schedules table:', err);
-    } else {
-      console.log('Schedules table created or already exists');
-    }
-  });
+  )`);
 
-  // Add other table creations here...
+  db.run(`CREATE TABLE IF NOT EXISTS appointments (
+    id TEXT PRIMARY KEY,
+    eventId TEXT NOT NULL,
+    userId TEXT NOT NULL,
+    inviteeEmail TEXT NOT NULL,
+    startTime TEXT NOT NULL,
+    endTime TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'scheduled',
+    FOREIGN KEY (eventId) REFERENCES events(id),
+    FOREIGN KEY (userId) REFERENCES users(id)
+  )`);
 });
 
 // Log database errors

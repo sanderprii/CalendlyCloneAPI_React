@@ -114,6 +114,7 @@ router.post('/', (req, res) => {
     [id, name, email, password, timezone],
     (err) => {
       if (err) {
+        console.error('Database error:', err.message);
         return res.status(500).json({ error: 'Database error' });
       }
       res.status(201).json({ id, name, email, timezone });

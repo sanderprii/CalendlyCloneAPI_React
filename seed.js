@@ -56,6 +56,16 @@ db.serialize(() => {
     FOREIGN KEY (userId) REFERENCES users(id)
   )`);
 
+  // Add token column to users table
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    timezone TEXT,
+    token TEXT  -- Token is optional
+  )`);
+
   console.log('Database seeded successfully!');
 });
 
