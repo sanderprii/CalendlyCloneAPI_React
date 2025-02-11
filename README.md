@@ -53,7 +53,7 @@ A RESTful API for scheduling and managing appointments, built with Express.js an
 
 ## API Documentation
 
-The API is documented using Swagger. You can access the interactive documentation at:
+The API is documented using Swagger. You can access the interactive documentation at: `http://localhost:3000/docs/`
 
 ## Why These API Stacks Exist
 
