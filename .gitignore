@@ -14,7 +14,7 @@ yarn-error.log
 # Database
 database.db
 database.db-journal
-sessions.db 
+sessions.db
 
 # IDE specific files
 .vscode/
