@@ -6,9 +6,9 @@ A RESTful API for scheduling and managing appointments, built with Express.js an
 
 - [Features](#features)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [API Documentation](#api-documentation)
+- [Why These API Stacks Exist](#why-these-api-stacks-exist)
 - [Users API](#users-api)
 - [Authentication API](#authentication-api)
 - [Events API](#events-api)
@@ -25,11 +25,6 @@ A RESTful API for scheduling and managing appointments, built with Express.js an
 - **Swagger Documentation**: Interactive API documentation available at `/docs`.
 
 ## Getting Started
-
-### Prerequisites
-
-- Node.js (v16 or higher)
-- npm (v8 or higher)
 
 ### Installation
 
@@ -59,6 +54,34 @@ A RESTful API for scheduling and managing appointments, built with Express.js an
 ## API Documentation
 
 The API is documented using Swagger. You can access the interactive documentation at:
+
+## Why These API Stacks Exist
+
+### 1. **Users API**
+- **What it does**: Manages user accounts (create, update, delete).
+- **Why it's needed**: To store user details and enable authentication.
+
+### 2. **Authentication API**
+- **What it does**: Handles login, logout, and session management.
+- **Why it's needed**: To secure the system and ensure only authorized users can access it.
+
+### 3. **Events API**
+- **What it does**: Manages event types (e.g., meetings, calls).
+- **Why it's needed**: To define the types of events users can schedule.
+
+### 4. **Schedules API**
+- **What it does**: Manages user availability.
+- **Why it's needed**: To ensure appointments are only scheduled during free times.
+
+### 5. **Appointments API**
+- **What it does**: Manages the scheduling, updating, and deletion of appointments.
+- **Why it's needed**: To handle the core functionality of booking appointments.
+
+### Why This Design Works
+- **Modular**: Each API focuses on one task, making the system easier to maintain.
+- **Scalable**: Independent APIs can be scaled separately as needed.
+- **Secure**: Centralized authentication keeps the system safe.
+
 
 ## Users API
 
