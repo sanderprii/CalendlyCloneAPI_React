@@ -8,6 +8,7 @@ A RESTful API for scheduling and managing appointments, built with Express.js an
 - **Event Management**: Create, update, and delete event types.
 - **Schedule Management**: Create, update, and delete user schedules.
 - **Appointment Management**: Schedule, update, and delete appointments.
+- **Authentication**: Secure endpoints with JWT-based authentication.
 - **Swagger Documentation**: Interactive API documentation available at `/docs`.
 
 ## Getting Started
