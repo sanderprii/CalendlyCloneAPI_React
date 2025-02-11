@@ -158,7 +158,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserPatch'
       responses:
         '200':
           description: User updated successfully
@@ -413,7 +413,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EventType'
+              $ref: '#/components/schemas/EventPatch'
       responses:
         '200':
           description: Event updated successfully
@@ -568,7 +568,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ScheduleInput'
+              $ref: '#/components/schemas/SchedulePatch'
       responses:
         '200':
           description: Schedule updated successfully
@@ -714,7 +714,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Appointment'
+              $ref: '#/components/schemas/AppointmentPatch'
       responses:
         '200':
           description: Appointment updated successfully
@@ -964,6 +964,58 @@ components:
           example: "Bad Request"
       required:
         - message
+
+    UserPatch:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        timezone:
+          type: string
+      minProperties: 1  # At least one field must be provided
+
+    EventPatch:
+      type: object
+      properties:
+        name:
+          type: string
+        duration:
+          type: integer
+        description:
+          type: string
+        color:
+          type: string
+      minProperties: 1  # At least one field must be provided
+
+    SchedulePatch:
+      type: object
+      properties:
+        availability:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSlot'
+      minProperties: 1  # At least one field must be provided
+
+    AppointmentPatch:
+      type: object
+      properties:
+        eventId:
+          type: string
+        userId:
+          type: string
+        inviteeEmail:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+      minProperties: 1  # At least one field must be provided
 
   securitySchemes:
     BearerAuth:
