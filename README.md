@@ -2,6 +2,19 @@
 
 A RESTful API for scheduling and managing appointments, built with Express.js and SQLite. This API allows users to manage events, schedules, and appointments, similar to Calendly.
 
+## Table of Contents
+
+- [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [API Documentation](#api-documentation)
+- [Users API](#users-api)
+- [Authentication API](#authentication-api)
+- [Events API](#events-api)
+- [Schedules API](#schedules-api)
+- [Appointments API](#appointments-api)
+
 ## Features
 
 - **User Management**: Create, update, and delete users.
@@ -43,7 +56,7 @@ A RESTful API for scheduling and managing appointments, built with Express.js an
 
 5. Access the API at `http://localhost:3000`.
 
-### API Documentation
+## API Documentation
 
 The API is documented using Swagger. You can access the interactive documentation at:
 
