@@ -6,30 +6,31 @@ const auth = require('../middleware/auth');
 // Schedule an appointment
 router.post('/', auth, (req, res) => {
   const { eventId, userId, inviteeEmail, startTime, endTime } = req.body;
+  const status = 'scheduled'; // Default status
 
   if (!eventId || !userId || !inviteeEmail || !startTime || !endTime) {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
-  const id = Date.now().toString(); // Simple ID generation
+  const id = Date.now().toString();
   db.run(
-    'INSERT INTO appointments (id, eventId, userId, inviteeEmail, startTime, endTime) VALUES (?, ?, ?, ?, ?, ?)',
-    [id, eventId, userId, inviteeEmail, startTime, endTime],
+    'INSERT INTO appointments (id, eventId, userId, inviteeEmail, startTime, endTime, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [id, eventId, userId, inviteeEmail, startTime, endTime, status],
     (err) => {
       if (err) {
         return res.status(500).json({ error: 'Database error' });
       }
-      res.status(201).json({ id, eventId, userId, inviteeEmail, startTime, endTime });
+      res.status(201).json({ id, eventId, userId, inviteeEmail, startTime, endTime, status });
     }
   );
 });
 
 // Partially update an appointment
-router.patch('/:appointmentId', (req, res) => {
+router.patch('/:appointmentId', auth, (req, res) => {
   const { appointmentId } = req.params;
-  const { eventId, userId, inviteeEmail, startTime, endTime } = req.body;
+  const { eventId, userId, inviteeEmail, startTime, endTime, status } = req.body;
 
-  if (!eventId && !userId && !inviteeEmail && !startTime && !endTime) {
+  if (!eventId && !userId && !inviteeEmail && !startTime && !endTime && !status) {
     return res.status(400).json({ error: 'At least one field is required' });
   }
 
@@ -56,6 +57,10 @@ router.patch('/:appointmentId', (req, res) => {
     fields.push('endTime = ?');
     values.push(endTime);
   }
+  if (status) {
+    fields.push('status = ?');
+    values.push(status);
+  }
 
   values.push(appointmentId);
 
@@ -68,12 +73,12 @@ router.patch('/:appointmentId', (req, res) => {
     if (this.changes === 0) {
       return res.status(404).json({ error: 'Appointment not found' });
     }
-    res.json({ id: appointmentId, eventId, userId, inviteeEmail, startTime, endTime });
+    res.json({ id: appointmentId, eventId, userId, inviteeEmail, startTime, endTime, status });
   });
 });
 
 // Delete an appointment
-router.delete('/:appointmentId', (req, res) => {
+router.delete('/:appointmentId', auth, (req, res) => {
   const { appointmentId } = req.params;
 
   db.run('DELETE FROM appointments WHERE id = ?', [appointmentId], function (err) {
@@ -88,7 +93,7 @@ router.delete('/:appointmentId', (req, res) => {
 });
 
 // Get all appointments
-router.get('/', (req, res) => {
+router.get('/', auth, (req, res) => {
   db.all('SELECT * FROM appointments', (err, rows) => {
     if (err) {
       return res.status(500).json({ error: 'Database error' });
@@ -98,7 +103,7 @@ router.get('/', (req, res) => {
 });
 
 // Get a specific appointment by ID
-router.get('/:appointmentId', (req, res) => {
+router.get('/:appointmentId', auth, (req, res) => {
   const { appointmentId } = req.params;
 
   db.get('SELECT * FROM appointments WHERE id = ?', [appointmentId], (err, row) => {

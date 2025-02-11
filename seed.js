@@ -6,6 +6,7 @@ db.serialize(() => {
   db.run('DELETE FROM users');
   db.run('DELETE FROM events');
   db.run('DELETE FROM schedules');
+  db.run('DELETE FROM appointments');
 
   // Insert users
   const users = [
@@ -42,7 +43,7 @@ db.serialize(() => {
   });
   insertSchedule.finalize();
 
-  // Add this to the db.serialize() block
+  // Create appointments table with status field
   db.run(`CREATE TABLE IF NOT EXISTS appointments (
     id TEXT PRIMARY KEY,
     eventId TEXT NOT NULL,
@@ -50,6 +51,7 @@ db.serialize(() => {
     inviteeEmail TEXT NOT NULL,
     startTime TEXT NOT NULL,
     endTime TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'scheduled',
     FOREIGN KEY (eventId) REFERENCES events(id),
     FOREIGN KEY (userId) REFERENCES users(id)
   )`);
