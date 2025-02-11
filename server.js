@@ -41,7 +41,7 @@ app.use('/users', auth, userRoutes);
 app.use('/events', auth, eventRoutes);
 app.use('/schedules', auth, scheduleRoutes);
 app.use('/appointments', auth, appointmentRoutes);
-app.use('/api/v1/sessions', sessionsRoutes);
+app.use('/sessions', sessionsRoutes);
 
 // Swagger documentation
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
