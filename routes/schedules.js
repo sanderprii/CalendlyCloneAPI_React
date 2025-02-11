@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const auth = require('../middleware/auth');
 
 // Get user's schedule
 router.get('/:userId', (req, res) => {
@@ -26,8 +27,8 @@ router.get('/:userId', (req, res) => {
   });
 });
 
-// Add this to routes/schedules.js
-router.post('/', (req, res) => {
+// Protected route
+router.post('/', auth, (req, res) => {
   const { userId, availability } = req.body;
 
   if (!userId || !availability) {

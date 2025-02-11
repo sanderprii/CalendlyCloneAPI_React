@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const auth = require('../middleware/auth');
 
 // Create a new event type
-router.post('/', (req, res) => {
+router.post('/', auth, (req, res) => {
   const { name, duration, description, color } = req.body;
 
   if (!name || !duration) {

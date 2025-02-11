@@ -600,3 +600,13 @@ Retrieve details of a specific appointment by its ID.
   "endTime": "2025-02-12T09:30:00Z"
 }
 ```
+
+## Authentication
+
+The API uses **session-based Bearer Authentication**. After logging in, a session cookie (`connect.sid`) is set, which acts as a Bearer token for subsequent requests.
+
+### How to Authenticate:
+1. **Login**: Send a `POST` request to `/sessions` with your email and password.
+2. **Session Cookie**: The server sets a session cookie (`connect.sid`) in the response.
+3. **Bearer Token**: Include the session cookie in all subsequent requests to access protected endpoints.
+4. **Logout**: Send a `DELETE` request to `/sessions` to destroy the session.
