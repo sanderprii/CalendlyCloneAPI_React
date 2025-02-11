@@ -60,16 +60,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "Unauthorized"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "Internal server error"
     post:
       security:
         - BearerAuth: []
@@ -125,14 +121,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: User not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "User not found"
         '500':
           description: Internal server error
           content:
@@ -258,6 +258,8 @@ paths:
           description: Server error
 
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Authentication
       summary: Check session
@@ -274,6 +276,18 @@ paths:
                     type: boolean
                   user:
                     $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /events:
     post:
@@ -310,11 +324,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "Internal server error"
+
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - Events
+      summary: List all events
+      description: Retrieve a list of all event types.
+      responses:
+        '200':
+          description: List of events retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /events/{eventId}:
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Events
       summary: Get event details
@@ -333,22 +376,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Event'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Event not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "Event not found"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "Internal server error"
     patch:
       security:
         - BearerAuth: []
@@ -466,6 +511,8 @@ paths:
 
   /schedules/{userId}:
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Schedules
       summary: Get user's schedule
@@ -479,27 +526,29 @@ paths:
           description: The ID of the user whose schedule to retrieve.
       responses:
         '200':
-          description: User's schedule retrieved successfully
+          description: Schedule retrieved successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Schedule'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Schedule not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "Schedule not found"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "Internal server error"
     patch:
       security:
         - BearerAuth: []
@@ -616,9 +665,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "Internal server error"
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Appointments
       summary: List all appointments
@@ -632,6 +681,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Appointment'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
           description: Internal server error
           content:
@@ -716,9 +771,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "Internal server error"
     get:
+      security:
+        - BearerAuth: []
       tags:
         - Appointments
       summary: Get appointment details
@@ -737,22 +792,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Appointment'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Appointment not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "Appointment not found"
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-              example:
-                message: "Internal server error"
 
 components:
   schemas:
