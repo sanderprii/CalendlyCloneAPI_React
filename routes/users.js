@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const auth = require('../middleware/auth');
 
 // Get all users with pagination
 router.get('/', (req, res) => {
@@ -138,6 +139,11 @@ router.delete('/sessions', (req, res) => {
     res.clearCookie('connect.sid');
     res.json({ message: 'Logout successful' });
   });
+});
+
+// Protected route
+router.get('/profile', auth, (req, res) => {
+  res.json({ user: req.session.user });
 });
 
 module.exports = router; 

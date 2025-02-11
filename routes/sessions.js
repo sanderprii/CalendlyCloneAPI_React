@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-const jwt = require('jsonwebtoken');
 
 // Login - Create session
 router.post('/', (req, res) => {
@@ -23,17 +22,11 @@ router.post('/', (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      'your-secret-key', // Replace with a secure secret key
-      { expiresIn: '1h' } // Token expires in 1 hour
-    );
-
     // Store user in session
     req.session.user = {
       id: user.id,
-      email: user.email
+      email: user.email,
+      name: user.name
     };
 
     res.json({ 
@@ -42,8 +35,7 @@ router.post('/', (req, res) => {
         id: user.id, 
         email: user.email,
         name: user.name
-      },
-      token // Include the token in the response
+      }
     });
   });
 });
