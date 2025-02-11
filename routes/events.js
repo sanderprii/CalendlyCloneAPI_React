@@ -96,4 +96,14 @@ router.delete('/:eventId', (req, res) => {
   });
 });
 
+// Get all events
+router.get('/', (req, res) => {
+  db.all('SELECT * FROM events', (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: 'Database error' });
+    }
+    res.json(rows);
+  });
+});
+
 module.exports = router; 
