@@ -1,10 +1,9 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express');const router = express.Router();
 const db = require('../db');
 const auth = require('../middleware/auth');
 
-// Get all users with pagination
-router.get('/', (req, res) => {
+// Get all users with pagination (protected)
+router.get('/', auth, (req, res) => {
   const { page = 1, pageSize = 20 } = req.query;
   const offset = (page - 1) * pageSize;
 
@@ -28,7 +27,7 @@ router.get('/', (req, res) => {
 });
 
 // Get single user
-router.get('/:userId', (req, res) => {
+router.get('/:userId', auth, (req, res) => {
   const { userId } = req.params;
   db.get('SELECT * FROM users WHERE id = ?', [userId], (err, row) => {
     if (err) {
@@ -42,7 +41,7 @@ router.get('/:userId', (req, res) => {
 });
 
 // Partially update a user
-router.patch('/:userId', (req, res) => {
+router.patch('/:userId', auth, (req, res) => {
   const { userId } = req.params;
   const { name, email, password, timezone } = req.body;
 
@@ -86,7 +85,7 @@ router.patch('/:userId', (req, res) => {
 });
 
 // Delete a user
-router.delete('/:userId', (req, res) => {
+router.delete('/:userId', auth, (req, res) => {
   const { userId } = req.params;
 
   db.run('DELETE FROM users WHERE id = ?', [userId], function (err) {
@@ -100,7 +99,7 @@ router.delete('/:userId', (req, res) => {
   });
 });
 
-// Create a new user
+// Create a new user (unprotected)
 router.post('/', (req, res) => {
   const { name, email, password, timezone } = req.body;
 
@@ -109,14 +108,17 @@ router.post('/', (req, res) => {
   }
 
   const id = Date.now().toString(); // Simple ID generation
+  console.log('Creating user with data:', { id, name, email, timezone });
+
   db.run(
     'INSERT INTO users (id, name, email, password, timezone) VALUES (?, ?, ?, ?, ?)',
     [id, name, email, password, timezone],
-    (err) => {
+    function (err) {
       if (err) {
-        console.error('Database error:', err.message);
-        return res.status(500).json({ error: 'Database error' });
+        console.error('Database error:', err.message); // Log the specific error
+        return res.status(500).json({ error: 'Database error', details: err.message });
       }
+      console.log('User created successfully:', this.lastID);
       res.status(201).json({ id, name, email, timezone });
     }
   );
