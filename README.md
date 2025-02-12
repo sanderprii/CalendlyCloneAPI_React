@@ -35,14 +35,14 @@ A RESTful API for scheduling and managing appointments, built with Express.js an
    npm install
    ```
 
-3. Seed the database with example data:
-   ```bash
-   node seed.js
-   ```
-
-4. Start the server:
+3. Start the server:
    ```bash
    npm start
+   ```
+
+4. Seed the database with example data:
+   ```bash
+   node seed.js
    ```
 
 5. Access the API at `http://localhost:3000`.
