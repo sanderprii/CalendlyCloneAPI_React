@@ -21,7 +21,7 @@ A RESTful API for scheduling and managing appointments, built with Express.js an
 - **Event Management**: Create, update, and delete event types.
 - **Schedule Management**: Create, update, and delete user schedules.
 - **Appointment Management**: Schedule, update, and delete appointments.
-- **Authentication**: Secure endpoints with JWT-based authentication.
+- **Authentication**: Secure endpoints with Bearer token authentication.
 - **Swagger Documentation**: Interactive API documentation available at `/docs`.
 
 ## Getting Started
@@ -212,7 +212,7 @@ Delete a user by their ID.
 
 ## Authentication API
 
-The Authentication API allows users to log in, log out, and check their session status. It uses JWT (JSON Web Tokens) for secure authentication.
+The Authentication API allows users to log in, log out, and check their session status. It uses Bearer tokens for secure authentication.
 
 ### Endpoints
 
@@ -273,6 +273,12 @@ Check if the user is authenticated and retrieve their session details.
   }
 }
 ```
+
+### Using Bearer Tokens
+- After logging in, include the token in the `Authorization` header for all protected endpoints:
+  ```
+  Authorization: Bearer <your-token>
+  ```
 
 ## Events API
 
@@ -600,13 +606,3 @@ Retrieve details of a specific appointment by its ID.
   "endTime": "2025-02-12T09:30:00Z"
 }
 ```
-
-## Authentication
-
-The API uses **session-based Bearer Authentication**. After logging in, a session cookie (`connect.sid`) is set, which acts as a Bearer token for subsequent requests.
-
-### How to Authenticate:
-1. **Login**: Send a `POST` request to `/sessions` with your email and password.
-2. **Session Cookie**: The server sets a session cookie (`connect.sid`) in the response.
-3. **Bearer Token**: Include the session cookie in all subsequent requests to access protected endpoints.
-4. **Logout**: Send a `DELETE` request to `/sessions` to destroy the session.
