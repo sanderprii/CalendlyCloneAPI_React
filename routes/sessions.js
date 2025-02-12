@@ -61,15 +61,4 @@ router.delete('/', (req, res) => {
   });
 });
 
-// Check session
-router.get('/', (req, res) => {
-  if (req.session.user) {
-    return res.json({ 
-      authenticated: true,
-      user: req.session.user
-    });
-  }
-  res.json({ authenticated: false });
-});
-
 module.exports = router; 
