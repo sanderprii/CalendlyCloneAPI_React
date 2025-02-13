@@ -44,12 +44,30 @@ A RESTful API for scheduling and managing appointments, built with Express.js an
    ```bash
    node seed.js
    ```
+   
+5. Frontend
+    ```bash
+    cd client
+   ```
+    
+    ```bash
+    npm install
+    ```
+    
+    ```bash
+    npm start
+    ```
 
-5. Access the API at `http://localhost:3000`.
+6. Create .env file at client directory and add the following line with your API URL (example port 5000):
+    ```bash
+    REACT_APP_API_URL=http://localhost:5000
+    ```
+
+5. Access the application at `http://localhost:3000`.
 
 ## API Documentation
 
-The API is documented using Swagger. You can access the interactive documentation at: `http://localhost:3000/docs/`
+The API is documented using Swagger. You can access the interactive documentation at: `http://localhost:5000/docs/`
 
 ## Why These API Stacks Exist
 
